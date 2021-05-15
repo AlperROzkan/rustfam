@@ -1,0 +1,13 @@
+[package]
+name = "FamRust"
+version = "0.1.0"
+authors = ["aozkan debian <alper.ozkan@etu.univ-nantes.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[[bin]]
+name = "fam_rust"
+path = "src/main.rs"
