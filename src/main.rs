@@ -1,28 +1,24 @@
 mod model;
-use model::person::Person;
 use model::family::CloseFamily;
+use model::person::Person;
 
 fn main() {
-    let helen = Person {
-        lastname:   String::from("Helen"),
-        surname:    String::from("Glenn"),
-    };
+    /*
+     * People declaration
+     */
+    let helen: Person = Person::new("Helen", "Glenn");
+    let george: Person = Person::new("George", "Pierce");
+    let rose: Person = Person::new("Tom", "Pierce");
+    let tom = Person::new("Tom", "Pierce");
 
-    let george = Person {
-        lastname:   String::from("George"),
-        surname:    String::from("Pierce"),
-    };
-
-    let rose = Person {
-        lastname:   String::from("Rose"),
-        surname:    String::from("Pierce"),
-    };
-
-    let fam1 = CloseFamily {
-        parents:    vec![george, helen],
-        children:   vec![rose],
-    };
+    /*
+     * Family manipulation
+     */
+    let mut fam1: CloseFamily = CloseFamily::new("Glenn-Pierce");
+    fam1.add_parent(helen);
+    fam1.add_parent(george);
+    fam1.add_child(rose);
+    fam1.add_child(tom);
 
     println!("{}", fam1);
-    
 }
