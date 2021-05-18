@@ -39,12 +39,42 @@ impl CloseFamily {
     }
 
     /**
+     * Replaces parents
+     * TODO : Error if more than two
+     * - self
+     * - parents : a collection of parents
+     */
+    pub fn replace_parents(&mut self, parents: Vec<Person>) {
+        self.parents = parents;
+    }
+
+    /**
      * Adds a child to the family
      * - self
      * - child: A child born from the parents
      */
     pub fn add_child(&mut self, child: Person) {
         self.children.push(child);
+    }
+
+    /**
+     * Replaces children
+     * - self
+     * - children : a collection of children
+     */
+    pub fn replace_children(&mut self, children: Vec<Person>) {
+        self.children = children;
+    }
+
+    /**
+     * Adds multiple children
+     * - self
+     * - children
+     */
+    pub fn add_children(&mut self, children: Vec<Person>) {
+        for elem in children {
+            self.add_child(elem);
+        }
     }
 }
 
