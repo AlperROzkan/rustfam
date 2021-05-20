@@ -9,13 +9,13 @@ use std::fmt;
  * - parents:   Parents parents of the family (0 <= 2)
  * - children:  The children of the family
  */
-pub struct CloseFamily {
+pub struct CloseFamily<'a> {
     pub name: String,
-    pub parents: Vec<Person>,
-    pub children: Vec<Person>,
+    pub parents: Vec<Person<'a>>,
+    pub children: Vec<Person<'a>>,
 }
 
-impl CloseFamily {
+impl<'a> CloseFamily<'a> {
     /** 
      * Instanciates a CloseFamily with empty parents and children
      * - name:  Family name
@@ -34,7 +34,7 @@ impl CloseFamily {
      * - self
      * - parent: A parent
      */
-    pub fn add_parent(&mut self, parent: Person) {
+    pub fn add_parent(&mut self, parent: Person<'a>) {
         self.parents.push(parent);
     }
 
@@ -44,7 +44,7 @@ impl CloseFamily {
      * - self
      * - parents : a collection of parents
      */
-    pub fn replace_parents(&mut self, parents: Vec<Person>) {
+    pub fn replace_parents(&mut self, parents: Vec<Person<'a>>) {
         self.parents = parents;
     }
 
@@ -53,7 +53,7 @@ impl CloseFamily {
      * - self
      * - child: A child born from the parents
      */
-    pub fn add_child(&mut self, child: Person) {
+    pub fn add_child(&mut self, child: Person<'a>) {
         self.children.push(child);
     }
 
@@ -62,7 +62,7 @@ impl CloseFamily {
      * - self
      * - children : a collection of children
      */
-    pub fn replace_children(&mut self, children: Vec<Person>) {
+    pub fn replace_children(&mut self, children: Vec<Person<'a>>) {
         self.children = children;
     }
 
@@ -71,14 +71,14 @@ impl CloseFamily {
      * - self
      * - children
      */
-    pub fn add_children(&mut self, children: Vec<Person>) {
+    pub fn add_children(&mut self, children: Vec<Person<'a>>) {
         for elem in children {
             self.add_child(elem);
         }
     }
 }
 
-impl fmt::Display for CloseFamily {
+impl<'a> fmt::Display for CloseFamily<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut result: String = String::from("[Parents]\n");
         for elem in &self.parents {
