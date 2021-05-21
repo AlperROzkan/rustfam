@@ -1,5 +1,8 @@
 use crate::Person;
 use std::fmt;
+use std::ptr;
+
+static mut FAMILY_ID: u16 = 0;
 
 /**
  * Struct defining a close family.
@@ -9,22 +12,45 @@ use std::fmt;
  * - parents:   Parents parents of the family (0 <= 2)
  * - children:  The children of the family
  */
+#[derive(Clone)]
 pub struct CloseFamily<'a> {
-    pub name: String,
+    id: u16,
+    pub name: &'a str,
     pub parents: Vec<Person<'a>>,
     pub children: Vec<Person<'a>>,
 }
 
 impl<'a> CloseFamily<'a> {
-    /** 
+    pub fn new(name: &'a str) -> CloseFamily<'a> {
+        unsafe {
+            FAMILY_ID += 1;
+            CloseFamily {
+                id: FAMILY_ID,
+                name: name,
+                parents: Vec::new(),
+                children: Vec::new(),
+            }
+        }
+    }
+
+    /**
      * Instanciates a CloseFamily with empty parents and children
-     * - name:  Family name
+     * - name:      Family name
+     * - parents:   The parents of the family. This is an already existing vector.
+     * - children:  The children of the family. This is an already existing vector.  
      */
-    pub fn new(name: &str) -> CloseFamily {
-        CloseFamily {
-            name: String::from(name),
-            parents: Vec::new(),
-            children: Vec::new(),
+    pub fn new_existing(
+        name: &'a str,
+        parents: Vec<Person<'a>>,
+        children: Vec<Person<'a>>,
+    ) -> CloseFamily<'a> {
+        unsafe {
+            CloseFamily {
+                id: FAMILY_ID,
+                name: name,
+                parents: parents,
+                children: children,
+            }
         }
     }
 

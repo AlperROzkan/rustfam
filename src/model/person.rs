@@ -1,22 +1,22 @@
 use std::fmt;
 
-static mut person_id: u32 = 0;
+static mut PERSON_ID: u16 = 0;
 
 #[derive(Clone, Copy)]
 pub struct Person<'a> {
-    id: u32,
+    id: u16,
     pub lastname: &'a str,
     pub surname: &'a str,
 }
 
 impl<'a> Person<'a> {
     pub unsafe fn new(lastname: &'a str, surname: &'a str) -> Person<'a> {
-        person_id += 1;
-        return Person {
-            id: person_id,
+        PERSON_ID += 1;
+        Person {
+            id: PERSON_ID,
             lastname: lastname,
             surname: surname,
-        };
+        }
     }
 }
 
