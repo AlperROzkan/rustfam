@@ -23,6 +23,7 @@ fn main() {
         rosa = Person::new("Rosa", "Trent");
         gregor = Person::new("Gregor", "Pierce");
     }
+    
     fam1.add_parent(helen);
     fam1.add_parent(george);
     fam1.add_child(rose);

@@ -1,6 +1,5 @@
 use crate::Person;
 use std::fmt;
-use std::ptr;
 
 static mut FAMILY_ID: u16 = 0;
 
