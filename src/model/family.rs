@@ -1,5 +1,7 @@
 use crate::Person;
 use std::fmt;
+use serde::{Serialize, Deserialize};
+use serde_json::json;
 
 static mut FAMILY_ID: u16 = 0;
 
@@ -20,6 +22,9 @@ pub struct CloseFamily<'a> {
 }
 
 impl<'a> CloseFamily<'a> {
+    /**
+     * Instaniates a CloseFamily
+     */
     pub fn new(name: &'a str) -> CloseFamily<'a> {
         unsafe {
             FAMILY_ID += 1;
