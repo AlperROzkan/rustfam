@@ -1,7 +1,7 @@
 use crate::Person;
-use std::fmt;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json::json;
+use std::fmt;
 
 static mut FAMILY_ID: u16 = 0;
 
@@ -13,12 +13,12 @@ static mut FAMILY_ID: u16 = 0;
  * - parents:   Parents parents of the family (0 <= 2)
  * - children:  The children of the family
  */
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CloseFamily<'a> {
     id: u16,
-    pub name: &'a str,
-    pub parents: Vec<Person<'a>>,
-    pub children: Vec<Person<'a>>,
+    name: &'a str,
+    parents: Vec<Person<'a>>,
+    children: Vec<Person<'a>>,
 }
 
 impl<'a> CloseFamily<'a> {
@@ -105,6 +105,22 @@ impl<'a> CloseFamily<'a> {
         for elem in children {
             self.add_child(elem);
         }
+    }
+
+    /**
+     * Returns the parents of the family
+     * - self
+     */
+    pub fn get_parents(self) -> Vec<Person<'a>> {
+        self.parents
+    }
+
+    /**
+     * Returns the children of the family
+     *
+     */
+    pub fn get_children(self) -> Vec<Person<'a>> {
+        self.children
     }
 }
 

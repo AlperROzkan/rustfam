@@ -6,6 +6,7 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+ "serde_test",
 ]
 
 [[package]]
@@ -66,6 +67,15 @@ checksum = "799e97dc9fdae36a5c8b8f2cae9ce2ee9fdce2058c57a93e6099d919fd982f79"
 dependencies = [
  "itoa",
  "ryu",
+ "serde",
+]
+
+[[package]]
+name = "serde_test"
+version = "1.0.126"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bd1055d1c20532080b9da5040ec8e27425f4d4573d8e29eb19ba4ff1e4b9da2d"
+dependencies = [
  "serde",
 ]
 

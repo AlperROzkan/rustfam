@@ -5,48 +5,7 @@ use model::person::Person;
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
 
-/**
- * Serialize exemple with a person
- *
- */
-fn serialize_exemple() {
-    println!("=== Serialize Test ===\n");
-
-    let nick: Person;
-
-    unsafe {
-        nick = Person::new("Nick", "Norton");
-    }
-
-    let f = serde_json::to_string(&nick);
-
-    println!("{:?}", f);
-
-    println!("\n=== End Serialize Test ===");
-}
-
-/**
- *
- */
-fn deserialize_exemple() -> Result<()> {
-    let dona_json = r#"
-    {
-        "id": 0,
-        "firstname": "Donatien",
-        "lastname": "De Montazac"
-    }"#;
-
-    let dona: Person = serde_json::from_str(dona_json)?;
-
-    println!(
-        "Tous les crus dignes de ce nom viennent de {} {}",
-        dona.firstname, dona.lastname
-    );
-
-    Ok(())
-}
-
-fn main() -> Result<()>{
+fn main() {
     /*
      * People declaration
      */
@@ -75,8 +34,4 @@ fn main() -> Result<()>{
     fam2.add_parent(rosa);
     fam2.add_parent(gregor);
     fam2.add_child(george);
-
-    serialize_exemple();
-
-    deserialize_exemple()
 }
