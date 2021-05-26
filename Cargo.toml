@@ -1,6 +1,6 @@
 [package]
 name = "FamRust"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["aozkan <alper.ozkan.p@gmail.com>"]
 edition = "2018"
 

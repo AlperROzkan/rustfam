@@ -2,15 +2,17 @@ mod model;
 use model::family::CloseFamily;
 use model::person::Person;
 
-use serde::{Deserialize, Serialize};
-use serde_json::Result;
 
 fn main() {
     /*
-     * People declaration
+     * Family declaration
      */
     let mut fam1: CloseFamily = CloseFamily::new("Glenn-Pierce");
     let mut fam2: CloseFamily = CloseFamily::new("Trent-Pierce");
+
+    /*
+    * Person declaration
+    */
     let helen: Person;
     let george: Person;
     let rose: Person;
@@ -18,6 +20,9 @@ fn main() {
     let rosa: Person;
     let gregor: Person;
 
+    /*
+    * Initialization of the people
+    */
     unsafe {
         helen = Person::new("Helen", "Glenn");
         george = Person::new("George", "Pierce");
@@ -26,6 +31,7 @@ fn main() {
         rosa = Person::new("Rosa", "Trent");
         gregor = Person::new("Gregor", "Pierce");
     }
+    
     fam1.add_parent(helen);
     fam1.add_parent(george);
     fam1.add_child(rose);
