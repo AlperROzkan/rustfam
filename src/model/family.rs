@@ -1,7 +1,9 @@
 use crate::Person;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::fmt;
+
+use std::fs::File;
+use std::path::Path;
 
 static mut FAMILY_ID: u16 = 0;
 
@@ -57,6 +59,22 @@ impl<'a> CloseFamily<'a> {
             }
         }
     }
+
+    /*
+     * Instanciates a CloseFamily from an existing file
+     * - path = Path : Path to read the CloseFamily from
+    pub fn new_from_file<P: AsRef<Path>>(path: P) -> Result<CloseFamily<'a>, Box<Error>> {
+        // Open the file with a buffer
+        let file: File = File::open(path)?;
+        let reader = BufReader::new(file);
+
+        // Instanciates the user from the file
+        let close_family_from_file = serde_json::from_reader(reader)?;
+
+        // Return the user
+        Ok(close_family_from_file)
+    }
+    */
 
     /**  
      * Adds a parent to the family
@@ -121,6 +139,23 @@ impl<'a> CloseFamily<'a> {
      */
     pub fn get_children(self) -> Vec<Person<'a>> {
         self.children
+    }
+
+    /**
+     * Write this family to a file
+     * TODO : Test
+     * - self
+     * - path: Path to file to write to
+     */
+    pub fn write_to_file<P: AsRef<Path>>(self, path: P) -> Result<(), serde_json::Error> {
+        // Create a file and write this family to it
+        match File::create(&path) {
+            Ok(file) => serde_json::to_writer(file, &self),
+            Err(e) => panic!(
+                "Error when creating file while writing family to a file. Error {}",
+                e
+            ),
+        }
     }
 }
 

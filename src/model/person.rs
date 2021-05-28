@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
 static mut PERSON_ID: u16 = 0;
@@ -75,7 +75,7 @@ impl<'a> fmt::Display for Person<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_test::{Token, assert_tokens};
+    use serde_test::{assert_tokens, Token};
 
     /**
      * Test the instanciation
