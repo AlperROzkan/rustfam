@@ -1,10 +1,11 @@
 mod model;
 use model::family::CloseFamily;
+use model::family::read_family_from_file;
 use model::person::Person;
 // File import-export
 use std::path::Path;
 
-fn main() -> std::io::Result<()> {
+fn main() {
     /*
      * Family declaration
      */
@@ -71,8 +72,6 @@ fn main() -> std::io::Result<()> {
 
     */
 
-    match fam2.write_to_file(Path::new("data/fam1.txt")) {
-        Ok(()) => return Ok(()),
-        Err(e) => panic!("{}", e),
-    };
+    fam1.write_to_file(Path::new("data/fam1.txt"));
+    println!("{}", read_family_from_file(Path::new("data/fam1.txt")));
 }

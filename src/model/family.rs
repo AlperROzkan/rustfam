@@ -3,9 +3,36 @@ use serde::{Deserialize, Serialize};
 use std::fmt;
 
 use std::fs::File;
+use std::io::BufReader;
+use std::io::Read;
 use std::path::Path;
 
 static mut FAMILY_ID: u16 = 0;
+
+/**
+* Get a stringified family from a file
+* - path : path to the family to stringify
+*/
+pub fn read_family_from_file<P: AsRef<Path>>(path: P) -> String {
+    let mut buf_reader;
+    let mut contents;
+
+    match File::open(path) {
+        Ok(file) => {
+            buf_reader = BufReader::new(file);
+            contents = String::new();
+            match buf_reader.read_to_string(&mut contents) {
+                Ok(_) => (),
+                Err(e) => panic!("Error when reading family from file: {}", e),
+            };
+            contents
+        }
+        Err(e) => panic!(
+            "Error when opening file when reading a family from file: {}",
+            e
+        ),
+    }
+}
 
 /**
  * Struct defining a close family.
@@ -147,10 +174,15 @@ impl<'a> CloseFamily<'a> {
      * - self
      * - path: Path to file to write to
      */
-    pub fn write_to_file<P: AsRef<Path>>(self, path: P) -> Result<(), serde_json::Error> {
+    pub fn write_to_file<P: AsRef<Path>>(self, path: P) {
         // Create a file and write this family to it
         match File::create(&path) {
-            Ok(file) => serde_json::to_writer(file, &self),
+            Ok(file) => {
+                match serde_json::to_writer(file, &self) {
+                    Ok(_) => (),
+                    Err(e) => panic!("Error when serializing family to file: {}", e),
+                }
+            },
             Err(e) => panic!(
                 "Error when creating file while writing family to a file. Error {}",
                 e
@@ -176,4 +208,67 @@ impl<'a> fmt::Display for CloseFamily<'a> {
         }
         writeln!(f, "{}", result)
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::io::{BufReader, Read};
+
+    use super::*;
+
+    /*
+     * Setup a family to do tests to
+     */
+    fn setup() -> CloseFamily<'static> {
+        let mut fam_test: CloseFamily = CloseFamily::new("Glenn-Pierce");
+        let helen: Person;
+        let george: Person;
+        let rose: Person;
+        unsafe {
+            helen = Person::new("Helen", "Glenn");
+            george = Person::new("George", "Pierce");
+            rose = Person::new("Tom", "Pierce");
+        }
+
+        fam_test
+    }
+
+    /*
+     * Test if write wrote correctly
+
+    #[test]
+    fn write_to_file_1() {
+
+        let mut file: File; // File to read & write from
+        let path_file = Path::new("./data/fam_test.json");
+
+        let fam_test: CloseFamily = setup(); // initialize the family
+        let fam_read: CloseFamily = fam_test.clone();
+
+        file = File::open(path_file).unwrap();
+        let mut buf_reader = BufReader::new(file);
+        let mut contents = String::new();
+        buf_reader.read_to_string(&mut contents).unwrap();
+
+        let fam_test: CloseFamily = setup(); // initialize the family
+        let fam_read: CloseFamily = fam_test.clone();
+        let path_test: &Path = Path::new("./data/fam_test.json"); // path for test file
+
+        match fam_test.write_to_file(&path_test) {
+            Ok(()) => {
+                match File::create(&path_test) {
+                    Ok(file) => {
+                        let mut buf_reader: BufReader<File> = BufReader::new(file);
+                        let mut contents: String = String::new();
+                        match buf_reader.read_to_string(&mut contents) {
+                            Ok(_) => assert_eq!(contents, serde_json::to_string(&fam_read).unwrap()),
+                            Err(e) => panic!("Error when reading file: {}", e),
+                        }
+                    },
+                    Err(e) => panic!("Error when creating file for reading family: {}", e),
+                }
+            }
+            Err(e) => panic!("Error when writing family to file:  {}", e),
+        };
+    }*/
 }
