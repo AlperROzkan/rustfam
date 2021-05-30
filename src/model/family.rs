@@ -87,22 +87,6 @@ impl<'a> CloseFamily<'a> {
         }
     }
 
-    /*
-     * Instanciates a CloseFamily from an existing file
-     * - path = Path : Path to read the CloseFamily from
-    pub fn new_from_file<P: AsRef<Path>>(path: P) -> Result<CloseFamily<'a>, Box<Error>> {
-        // Open the file with a buffer
-        let file: File = File::open(path)?;
-        let reader = BufReader::new(file);
-
-        // Instanciates the user from the file
-        let close_family_from_file = serde_json::from_reader(reader)?;
-
-        // Return the user
-        Ok(close_family_from_file)
-    }
-    */
-
     /**  
      * Adds a parent to the family
      * TODO : Error if more than two
@@ -177,11 +161,9 @@ impl<'a> CloseFamily<'a> {
     pub fn write_to_file<P: AsRef<Path>>(self, path: P) {
         // Create a file and write this family to it
         match File::create(&path) {
-            Ok(file) => {
-                match serde_json::to_writer(file, &self) {
-                    Ok(_) => (),
-                    Err(e) => panic!("Error when serializing family to file: {}", e),
-                }
+            Ok(file) => match serde_json::to_writer(file, &self) {
+                Ok(_) => (),
+                Err(e) => panic!("Error when serializing family to file: {}", e),
             },
             Err(e) => panic!(
                 "Error when creating file while writing family to a file. Error {}",
@@ -235,25 +217,24 @@ mod tests {
 
     /**
      * Test if write wrote correctly
-    */
+     */
     #[test]
     fn write_to_file_1() {
         // Initialize family
         let fam_test: CloseFamily = setup();
-        let path: &Path = Path::new("data/fam_test.json"); 
-        
-        
-        // Write family to test_file 
+        let path: &Path = Path::new("data/fam_test.json");
+
+        // Write family to test_file
         fam_test.write_to_file(path);
-        
+
         // Verify if file contents corespond to family
         match File::create(path) {
             Ok(file) => {
                 let mut buf_reader: BufReader<File> = BufReader::new(file);
-                let mut contents = String::new(); // Read family from file 
+                let mut contents = String::new(); // Read family from file
                 buf_reader.read_to_string(&mut contents);
                 assert_eq!(contents, read_family_from_file(path));
-            },
+            }
             Err(e) => panic!("Test, error write_to_file_1: {}", e),
         }
     }
