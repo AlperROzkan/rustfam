@@ -1,9 +1,9 @@
 mod model;
-use model::family::CloseFamily;
-use model::family::read_family_from_file;
-use model::person::Person;
 // File import-export
 use std::path::Path;
+
+use crate::model::family::close_family::{CloseFamily, read_family_from_file};
+use crate::model::person::Person;
 
 fn main() {
     /*
@@ -47,7 +47,6 @@ fn main() {
     fam2.add_child(george);
 
     /*
-
     // ************
     // Write & Read
     // ************

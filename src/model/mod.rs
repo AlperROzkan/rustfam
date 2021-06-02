@@ -1,2 +1,2 @@
-pub mod person;
 pub mod family;
+pub mod person;

@@ -1,11 +1,11 @@
-use crate::Person;
 use serde::{Deserialize, Serialize};
 use std::fmt;
-
 use std::fs::File;
 use std::io::BufReader;
 use std::io::Read;
 use std::path::Path;
+
+use crate::model::person::Person;
 
 static mut FAMILY_ID: u16 = 0;
 

@@ -9,7 +9,7 @@ static mut PERSON_ID: u16 = 0;
  * - firstname: The firstname of the person
  * - lastname: The lastname of the person
  */
-#[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Hash, Eq, PartialOrd)]
 pub struct Person<'a> {
     id: u16,
     firstname: &'a str,
