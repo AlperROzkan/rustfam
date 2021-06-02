@@ -4,10 +4,10 @@ use std::fmt;
 static mut PERSON_ID: u16 = 0;
 
 /**
- * Defines a normal person, nothing weird here.
- * - id : The id of the person
- * - firstname: The firstname of the person
- * - lastname: The lastname of the person
+ Defines a normal person, nothing weird here.
+ * id : The id of the person
+ * firstname: The firstname of the person
+ * lastname: The lastname of the person
  */
 #[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Hash, Eq, PartialOrd)]
 pub struct Person<'a> {
@@ -18,9 +18,9 @@ pub struct Person<'a> {
 
 impl<'a> Person<'a> {
     /**
-     * Instanciates a new person
-     * - firstname: The firstname of the person
-     * - lastname: The lastname of the person
+     Instanciates a new person
+     * firstname: The firstname of the person
+     * lastname: The lastname of the person
      */
     pub unsafe fn new(firstname: &'a str, lastname: &'a str) -> Person<'a> {
         PERSON_ID += 1;
@@ -32,24 +32,24 @@ impl<'a> Person<'a> {
     }
 
     /**
-     * Gets id
-     * - self
+     Gets id
+     * self
      */
     pub fn get_id(self) -> u16 {
         self.id
     }
 
     /**
-     * Gets firstname
-     * - self
+     Gets firstname
+     * self
      */
     pub fn get_firstname(self) -> String {
         String::from(self.firstname)
     }
 
     /**
-     * Gets lastname
-     * - self
+     Gets lastname
+     * self
      */
     pub fn get_lastname(self) -> String {
         String::from(self.lastname)
@@ -58,9 +58,9 @@ impl<'a> Person<'a> {
 
 impl<'a> fmt::Display for Person<'a> {
     /**
-     * To string for a person
-     * - self
-     * - f : The formatter chosen for the to string
+     To string for a person
+     * self
+     * f : The formatter chosen for the to string
      * returns Result
      */
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

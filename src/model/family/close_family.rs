@@ -10,8 +10,8 @@ use crate::model::person::Person;
 static mut FAMILY_ID: u16 = 0;
 
 /**
-* Get a stringified family from a file
-* - path : path to the family to stringify
+Get a stringified family from a file
+* path : path to the family to stringify
 */
 pub fn read_family_from_file<P: AsRef<Path>>(path: P) -> String {
     let mut buf_reader;
@@ -35,13 +35,13 @@ pub fn read_family_from_file<P: AsRef<Path>>(path: P) -> String {
 }
 
 /**
- * Struct defining a close family.
- * Describes a very close family with two parents and their children.
- * It does not describe an extended family like cousins, aunts, uncles, grandparents, ...
- * - name:      Family name
- * - parents:   Parents parents of the family (0 <= 2)
- * - children:  The children of the family
- */
+Struct defining a close family.
+Describes a very close family with two parents and their children.
+It does not describe an extended family like cousins, aunts, uncles, grandparents, ...
+* name:      Family name
+* parents:   Parents parents of the family (0 <= 2)
+* children:  The children of the family
+*/
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CloseFamily<'a> {
     id: u16,
@@ -67,10 +67,10 @@ impl<'a> CloseFamily<'a> {
     }
 
     /**
-     * Instanciates a CloseFamily with empty parents and children
-     * - name:      Family name
-     * - parents:   The parents of the family. This is an already existing vector.
-     * - children:  The children of the family. This is an already existing vector.  
+    Instanciates a CloseFamily with empty parents and children
+     * name:      Family name
+     * parents:   The parents of the family. This is an already existing vector.
+     * children:  The children of the family. This is an already existing vector.
      */
     pub fn new_existing(
         name: &'a str,
@@ -87,49 +87,49 @@ impl<'a> CloseFamily<'a> {
         }
     }
 
-    /**  
-     * Adds a parent to the family
-     * TODO : Error if more than two
-     * - self
-     * - parent: A parent
-     */
+    /**
+    Adds a parent to the family
+    * TODO : Error if more than two
+    * self
+    * parent: A parent
+    */
     pub fn add_parent(&mut self, parent: Person<'a>) {
         self.parents.push(parent);
     }
 
     /**
-     * Replaces parents
-     * TODO : Error if more than two
-     * - self
-     * - parents : a collection of parents
-     */
+    Replaces parents
+    * TODO : Error if more than two
+    * self
+    * parents : a collection of parents
+    */
     pub fn replace_parents(&mut self, parents: Vec<Person<'a>>) {
         self.parents = parents;
     }
 
     /**
-     * Adds a child to the family
-     * - self
-     * - child: A child born from the parents
-     */
+    Adds a child to the family
+    * self
+    * child: A child born from the parents
+    */
     pub fn add_child(&mut self, child: Person<'a>) {
         self.children.push(child);
     }
 
     /**
-     * Replaces children
-     * - self
-     * - children : a collection of children
-     */
+    Replaces children
+    * self
+    * children : a collection of children
+    */
     pub fn replace_children(&mut self, children: Vec<Person<'a>>) {
         self.children = children;
     }
 
     /**
-     * Adds multiple children
-     * - self
-     * - children
-     */
+    Adds multiple children
+    * self
+    * children
+    */
     pub fn add_children(&mut self, children: Vec<Person<'a>>) {
         for elem in children {
             self.add_child(elem);
@@ -137,27 +137,27 @@ impl<'a> CloseFamily<'a> {
     }
 
     /**
-     * Returns the parents of the family
-     * - self
-     */
+    Returns the parents of the family
+    * self
+    */
     pub fn get_parents(self) -> Vec<Person<'a>> {
         self.parents
     }
 
     /**
-     * Returns the children of the family
-     *
-     */
+    Returns the children of the family
+    * self
+    */
     pub fn get_children(self) -> Vec<Person<'a>> {
         self.children
     }
 
     /**
-     * Write this family to a file
-     * TODO : Test
-     * - self
-     * - path: Path to file to write to
-     */
+    Write this family to a file
+    * TODO : Test
+    * self
+    * path: Path to file to write to
+    */
     pub fn write_to_file<P: AsRef<Path>>(self, path: P) {
         // Create a file and write this family to it
         match File::create(&path) {

@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 /**
- * A Pairing between two things.
- * - linked_1
- * - linked_2
+ A Pairing between two things.
+ * linked_1
+ * linked_2
  */
 #[derive(Debug, Clone, Copy, Hash, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Pairing<T> {
