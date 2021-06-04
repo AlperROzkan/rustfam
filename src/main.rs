@@ -2,15 +2,15 @@ mod model;
 // File import-export
 use std::path::Path;
 
-use crate::model::family::close_family::{CloseFamily, read_family_from_file};
+use crate::model::family::family::{Family, read_family_from_file};
 use crate::model::person::Person;
 
 fn main() {
     /*
      * Family declaration
      */
-    let mut fam1: CloseFamily = CloseFamily::new("Glenn-Pierce");
-    let mut fam2: CloseFamily = CloseFamily::new("Trent-Pierce");
+    let mut fam1: Family = Family::new("Glenn-Pierce");
+    let mut fam2: Family = Family::new("Trent-Pierce");
 
     /*
      * Person declaration

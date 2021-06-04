@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt;
 use std::fs::File;
 use std::io::BufReader;
@@ -6,6 +7,8 @@ use std::io::Read;
 use std::path::Path;
 
 use crate::model::person::Person;
+
+use super::pairing::Pairing;
 
 static mut FAMILY_ID: u16 = 0;
 
@@ -43,31 +46,33 @@ It does not describe an extended family like cousins, aunts, uncles, grandparent
 * children:  The children of the family
 */
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
-pub struct CloseFamily<'a> {
+pub struct Family<'a> {
     id: u16,
     name: &'a str,
     parents: Vec<Person<'a>>,
     children: Vec<Person<'a>>,
+    families: HashMap<Pairing<Person<'a>>, Pairing<Family<'a>>>,
 }
 
-impl<'a> CloseFamily<'a> {
+impl<'a> Family<'a> {
     /**
-     * Instaniates a CloseFamily
+     * Instaniates a Family
      */
-    pub fn new(name: &'a str) -> CloseFamily<'a> {
+    pub fn new(name: &'a str) -> Family<'a> {
         unsafe {
             FAMILY_ID += 1;
-            CloseFamily {
+            Family {
                 id: FAMILY_ID,
                 name: name,
                 parents: Vec::new(),
                 children: Vec::new(),
+                families: HashMap::new(),
             }
         }
     }
 
     /**
-    Instanciates a CloseFamily with empty parents and children
+    Instanciates a Family with empty parents and children
      * name:      Family name
      * parents:   The parents of the family. This is an already existing vector.
      * children:  The children of the family. This is an already existing vector.
@@ -76,13 +81,15 @@ impl<'a> CloseFamily<'a> {
         name: &'a str,
         parents: Vec<Person<'a>>,
         children: Vec<Person<'a>>,
-    ) -> CloseFamily<'a> {
+        families: HashMap<Pairing<Person<'a>>, Pairing<Family<'a>>>,
+    ) -> Family<'a> {
         unsafe {
-            CloseFamily {
+            Family {
                 id: FAMILY_ID,
-                name: name,
-                parents: parents,
-                children: children,
+                name,
+                parents,
+                children,
+                families,
             }
         }
     }
@@ -173,7 +180,7 @@ impl<'a> CloseFamily<'a> {
     }
 }
 
-impl<'a> fmt::Display for CloseFamily<'a> {
+impl<'a> fmt::Display for Family<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut result: String = String::from("[Parents]\n");
         for elem in &self.parents {
@@ -201,8 +208,8 @@ mod tests {
     /*
      * Setup a family to do tests to
      */
-    fn setup() -> CloseFamily<'static> {
-        let mut fam_test: CloseFamily = CloseFamily::new("Glenn-Pierce");
+    fn setup() -> Family<'static> {
+        let mut fam_test: Family = Family::new("Glenn-Pierce");
         let helen: Person;
         let george: Person;
         let rose: Person;
@@ -221,7 +228,7 @@ mod tests {
     #[test]
     fn write_to_file_1() {
         // Initialize family
-        let fam_test: CloseFamily = setup();
+        let fam_test: Family = setup();
         let path: &Path = Path::new("data/fam_test.json");
 
         // Write family to test_file

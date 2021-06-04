@@ -1,3 +1,2 @@
-pub mod close_family;
-pub mod extended_family;
+pub mod family;
 pub mod pairing;
