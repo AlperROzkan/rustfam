@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 use std::collections::HashMap;
 use std::fmt;
 use std::fs::File;
@@ -45,13 +45,13 @@ It does not describe an extended family like cousins, aunts, uncles, grandparent
 * parents:   Parents parents of the family (0 <= 2)
 * children:  The children of the family
 */
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Serialize, Debug, PartialEq)]
 pub struct Family<'a> {
     id: u16,
     name: &'a str,
-    parents: Vec<Person<'a>>,
-    children: Vec<Person<'a>>,
-    families: HashMap<Pairing<Person<'a>>, Pairing<Family<'a>>>,
+    parents: Vec<&'a Person<'a>>,
+    children: Vec<&'a Person<'a>>,
+    families: HashMap<Pairing<String>, &'a Family<'a>>,
 }
 
 impl<'a> Family<'a> {
@@ -79,9 +79,9 @@ impl<'a> Family<'a> {
      */
     pub fn new_existing(
         name: &'a str,
-        parents: Vec<Person<'a>>,
-        children: Vec<Person<'a>>,
-        families: HashMap<Pairing<Person<'a>>, Pairing<Family<'a>>>,
+        parents: Vec<&'a Person<'a>>,
+        children: Vec<&'a Person<'a>>,
+        families: HashMap<Pairing<String>, &'a Family<'a>>,
     ) -> Family<'a> {
         unsafe {
             Family {
@@ -100,7 +100,7 @@ impl<'a> Family<'a> {
     * self
     * parent: A parent
     */
-    pub fn add_parent(&mut self, parent: Person<'a>) {
+    pub fn add_parent(&mut self, parent: &'a Person<'a>) {
         self.parents.push(parent);
     }
 
@@ -110,7 +110,7 @@ impl<'a> Family<'a> {
     * self
     * parents : a collection of parents
     */
-    pub fn replace_parents(&mut self, parents: Vec<Person<'a>>) {
+    pub fn replace_parents(&mut self, parents: Vec<&'a Person<'a>>) {
         self.parents = parents;
     }
 
@@ -119,7 +119,7 @@ impl<'a> Family<'a> {
     * self
     * child: A child born from the parents
     */
-    pub fn add_child(&mut self, child: Person<'a>) {
+    pub fn add_child(&mut self, child: &'a Person<'a>) {
         self.children.push(child);
     }
 
@@ -128,7 +128,7 @@ impl<'a> Family<'a> {
     * self
     * children : a collection of children
     */
-    pub fn replace_children(&mut self, children: Vec<Person<'a>>) {
+    pub fn replace_children(&mut self, children: Vec<&'a Person<'a>>) {
         self.children = children;
     }
 
@@ -137,28 +137,12 @@ impl<'a> Family<'a> {
     * self
     * children
     */
-    pub fn add_children(&mut self, children: Vec<Person<'a>>) {
+    pub fn add_children(&mut self, children: Vec<&'a Person<'a>>) {
         for elem in children {
             self.add_child(elem);
         }
     }
-
-    /**
-    Returns the parents of the family
-    * self
-    */
-    pub fn get_parents(self) -> Vec<Person<'a>> {
-        self.parents
-    }
-
-    /**
-    Returns the children of the family
-    * self
-    */
-    pub fn get_children(self) -> Vec<Person<'a>> {
-        self.children
-    }
-
+    
     /**
     Write this family to a file
     * TODO : Test

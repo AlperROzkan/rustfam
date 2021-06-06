@@ -37,14 +37,14 @@ fn main() {
     /*
      * Add people to the family
      */
-    fam1.add_parent(helen);
-    fam1.add_parent(george);
-    fam1.add_child(rose);
-    fam1.add_child(tom);
+    fam1.add_parent(&helen);
+    fam1.add_parent(&george);
+    fam1.add_child(&rose);
+    fam1.add_child(&tom);
 
-    fam2.add_parent(rosa);
-    fam2.add_parent(gregor);
-    fam2.add_child(george);
+    fam2.add_parent(&rosa);
+    fam2.add_parent(&gregor);
+    fam2.add_child(&george);
 
     /*
     // ************

@@ -75,7 +75,6 @@ impl<'a> fmt::Display for Person<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_test::{assert_tokens, Token};
 
     /**
      * Test the instanciation
