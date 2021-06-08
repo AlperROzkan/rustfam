@@ -1,5 +1,4 @@
 use serde::{Serialize};
-use std::collections::HashMap;
 use std::fmt;
 use std::fs::File;
 use std::io::BufReader;
@@ -7,8 +6,6 @@ use std::io::Read;
 use std::path::Path;
 
 use crate::model::person::Person;
-
-use super::pairing::Pairing;
 
 static mut FAMILY_ID: u16 = 0;
 
@@ -41,17 +38,16 @@ pub fn read_family_from_file<P: AsRef<Path>>(path: P) -> String {
 Struct defining a close family.
 Describes a very close family with two parents and their children.
 It does not describe an extended family like cousins, aunts, uncles, grandparents, ...
-* name:      Family name
-* parents:   Parents parents of the family (0 <= 2)
-* children:  The children of the family
+* name:     Family name
+* parents:  Parents parents of the family (0 <= 2)
+* children: The children of the family
 */
 #[derive(Clone, Serialize, Debug, PartialEq)]
 pub struct Family<'a> {
     id: u16,
     name: &'a str,
-    parents: Vec<&'a Person<'a>>,
-    children: Vec<&'a Person<'a>>,
-    families: HashMap<Pairing<String>, &'a Family<'a>>,
+    parents: Vec<Person<'a>>,
+    children: Vec<Person<'a>>,
 }
 
 impl<'a> Family<'a> {
@@ -66,7 +62,6 @@ impl<'a> Family<'a> {
                 name: name,
                 parents: Vec::new(),
                 children: Vec::new(),
-                families: HashMap::new(),
             }
         }
     }
@@ -79,9 +74,8 @@ impl<'a> Family<'a> {
      */
     pub fn new_existing(
         name: &'a str,
-        parents: Vec<&'a Person<'a>>,
-        children: Vec<&'a Person<'a>>,
-        families: HashMap<Pairing<String>, &'a Family<'a>>,
+        parents: Vec<Person<'a>>,
+        children: Vec<Person<'a>>,
     ) -> Family<'a> {
         unsafe {
             Family {
@@ -89,7 +83,6 @@ impl<'a> Family<'a> {
                 name,
                 parents,
                 children,
-                families,
             }
         }
     }
@@ -100,7 +93,7 @@ impl<'a> Family<'a> {
     * self
     * parent: A parent
     */
-    pub fn add_parent(&mut self, parent: &'a Person<'a>) {
+    pub fn add_parent(&mut self, parent: Person<'a>) {
         self.parents.push(parent);
     }
 
@@ -110,7 +103,7 @@ impl<'a> Family<'a> {
     * self
     * parents : a collection of parents
     */
-    pub fn replace_parents(&mut self, parents: Vec<&'a Person<'a>>) {
+    pub fn replace_parents(&mut self, parents: Vec<Person<'a>>) {
         self.parents = parents;
     }
 
@@ -119,7 +112,7 @@ impl<'a> Family<'a> {
     * self
     * child: A child born from the parents
     */
-    pub fn add_child(&mut self, child: &'a Person<'a>) {
+    pub fn add_child(&mut self, child: Person<'a>) {
         self.children.push(child);
     }
 
@@ -128,7 +121,7 @@ impl<'a> Family<'a> {
     * self
     * children : a collection of children
     */
-    pub fn replace_children(&mut self, children: Vec<&'a Person<'a>>) {
+    pub fn replace_children(&mut self, children: Vec<Person<'a>>) {
         self.children = children;
     }
 
@@ -137,7 +130,7 @@ impl<'a> Family<'a> {
     * self
     * children
     */
-    pub fn add_children(&mut self, children: Vec<&'a Person<'a>>) {
+    pub fn add_children(&mut self, children: Vec<Person<'a>>) {
         for elem in children {
             self.add_child(elem);
         }
@@ -161,6 +154,40 @@ impl<'a> Family<'a> {
                 e
             ),
         }
+    }
+
+    /**
+    Initializes a family
+    */
+    pub fn init_1() -> Family<'a> {
+        let gregor: Person;
+        let gloria: Person;
+        let artie: Person;
+
+        unsafe {
+            gregor = Person::new("Gregor", "Drouv");
+            gloria = Person::new("Gloria", "Donia");
+            artie = Person::new("Artie", "Drouv");
+        }
+        
+        Family::new_existing("drouv-donia", vec![gregor, gloria], vec![artie])
+    }
+
+    /**
+    Initializes a family
+    */
+    pub fn init_2() -> Family<'a> {
+        let jack: Person;
+        let gislaine: Person;
+        let perinne: Person;
+
+        unsafe {
+            jack = Person::new("Jack", "Tarot");
+            gislaine = Person::new("Gislaine", "Montaig");
+            perinne = Person::new("Perinne", "Tarot");
+        }
+        
+        Family::new_existing("drouv-donia", vec![jack, gislaine], vec![perinne])
     }
 }
 
