@@ -37,12 +37,12 @@ impl<'a> Person<'a> {
     }
 
     /// Get a reference to the person's firstname.
-    pub fn firstname(&self) -> &&'a str {
+    pub fn firstname(&self) -> &'a str {
         &self.firstname
     }
 
     /// Get a reference to the person's lastname.
-    pub fn lastname(&self) -> &&'a str {
+    pub fn lastname(&self) -> &'a str {
         &self.lastname
     }
 }

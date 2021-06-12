@@ -98,31 +98,12 @@ impl<'a> Family<'a> {
     }
 
     /**
-    Replaces parents
-    * TODO : Error if more than two
-    * self
-    * parents : a collection of parents
-    */
-    pub fn replace_parents(&mut self, parents: Vec<Person<'a>>) {
-        self.parents = parents;
-    }
-
-    /**
     Adds a child to the family
     * self
     * child: A child born from the parents
     */
     pub fn add_child(&mut self, child: Person<'a>) {
         self.children.push(child);
-    }
-
-    /**
-    Replaces children
-    * self
-    * children : a collection of children
-    */
-    pub fn replace_children(&mut self, children: Vec<Person<'a>>) {
-        self.children = children;
     }
 
     /**
@@ -134,6 +115,20 @@ impl<'a> Family<'a> {
         for elem in children {
             self.add_child(elem);
         }
+    }
+
+    /**
+    Get a child with his firstname.
+    * self
+    * firstname : the firstname of the person
+    */
+    pub fn get_child_firstname(&mut self, firstname: String) -> Option<Person> {
+        for child in self.children.iter() {
+            if child.firstname().eq(&firstname) {
+                return Some(*child);
+            }
+        }
+        None
     }
     
     /**
@@ -177,6 +172,7 @@ impl<'a> Family<'a> {
     Initializes a family
     */
     pub fn init_2() -> Family<'a> {
+        let mut return_fam: Family<'a> = Family::new("drouv-donia");
         let jack: Person;
         let gislaine: Person;
         let perinne: Person;
@@ -186,8 +182,11 @@ impl<'a> Family<'a> {
             gislaine = Person::new("Gislaine", "Montaig");
             perinne = Person::new("Perinne", "Tarot");
         }
-        
-        Family::new_existing("drouv-donia", vec![jack, gislaine], vec![perinne])
+
+        return_fam.add_parent(jack);
+        return_fam.add_parent(gislaine);
+        return_fam.add_child(perinne);
+        return_fam        
     }
 }
 
@@ -227,8 +226,12 @@ mod tests {
         unsafe {
             helen = Person::new("Helen", "Glenn");
             george = Person::new("George", "Pierce");
-            rose = Person::new("Tom", "Pierce");
+            rose = Person::new("Rose", "Pierce");
         }
+
+        fam_test.add_parent(helen);
+        fam_test.add_parent(george);
+        fam_test.add_child(rose);
 
         fam_test
     }
@@ -254,6 +257,28 @@ mod tests {
                 assert_eq!(contents, read_family_from_file(path));
             }
             Err(e) => panic!("Test, error write_to_file_1: {}", e),
+        }
+    }
+
+    #[test]
+    fn get_child_firstname_test_1() {
+        let mut fam_test: Family = setup();
+        
+        // Test if we can find someone named "Helen" in family
+        match fam_test.get_child_firstname(String::from("Rose")) {
+            Some(child) => assert_eq!(String::from(child.firstname()), String::from("Rose")),
+            None => panic!("get_child_firstname_test_1 : failed to find child from a family"),
+        }
+    }
+
+    #[test]
+    fn get_child_firstname_test_2() {
+        let mut fam_test: Family = setup();
+        
+        // Test if we can find someone named "Helden" in family
+        match fam_test.get_child_firstname(String::from("Rose")) {
+            Some(child) => assert_ne!(String::from(child.firstname()), String::from("Rosen")),
+            None => panic!("get_child_firstname_test_2 : failed to find child from a family"),
         }
     }
 }
