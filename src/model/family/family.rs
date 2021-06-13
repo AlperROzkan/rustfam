@@ -118,6 +118,39 @@ impl<'a> Family<'a> {
     }
 
     /**
+    Gets a family member from it's firstname. Checks the parents and children vecs.
+    * self
+    * firstname : the firstname of the person to search
+    */
+    pub fn get_family_member_firstname(&mut self, firstname: String) -> Option<Person> {
+        for person in self.parents.iter() {
+            if person.firstname().eq(&firstname) {
+                return Some(*person);
+            }
+        }
+        for person in self.children.iter() {
+            if person.firstname().eq(&firstname) {
+                return Some(*person);
+            }
+        }
+        None
+    }
+
+    /**
+    Get a parent with his firstname.
+    * self
+    * firstname : the firstname of the person
+    */
+    pub fn get_parent_firstname(&mut self, firstname: String) -> Option<Person> {
+        for parent in self.parents.iter() {
+            if parent.firstname().eq(&firstname) {
+                return Some(*parent);
+            }
+        }
+        None
+    }
+
+    /**
     Get a child with his firstname.
     * self
     * firstname : the firstname of the person
@@ -264,7 +297,7 @@ mod tests {
     fn get_child_firstname_test_1() {
         let mut fam_test: Family = setup();
         
-        // Test if we can find someone named "Helen" in family
+        // Test if we can find someone named "Rose" in family
         match fam_test.get_child_firstname(String::from("Rose")) {
             Some(child) => assert_eq!(String::from(child.firstname()), String::from("Rose")),
             None => panic!("get_child_firstname_test_1 : failed to find child from a family"),
@@ -275,10 +308,44 @@ mod tests {
     fn get_child_firstname_test_2() {
         let mut fam_test: Family = setup();
         
-        // Test if we can find someone named "Helden" in family
+        // Test if we can find someone named "Rosen" in family
         match fam_test.get_child_firstname(String::from("Rose")) {
             Some(child) => assert_ne!(String::from(child.firstname()), String::from("Rosen")),
             None => panic!("get_child_firstname_test_2 : failed to find child from a family"),
+        }
+    }
+
+    #[test]
+    fn get_parent_firstname_test_1() {
+        let mut fam_test: Family = setup();
+        
+        // Test if we can find someone named "Helen" in family
+        match fam_test.get_parent_firstname(String::from("Helen")) {
+            Some(parent) => assert_eq!(String::from(parent.firstname()), String::from("Helen")),
+            None => panic!("get_parent_firstname_test_1 : failed to find parent from a family"),
+        }
+    }
+
+    #[test]
+    fn get_parent_firstname_test_2() {
+        let mut fam_test: Family = setup();
+        
+        // Test if we can find someone named "Helen" in family
+        match fam_test.get_parent_firstname(String::from("George")) {
+            Some(parent) => assert_eq!(String::from(parent.firstname()), String::from("George")),
+            None => panic!("get_parent_firstname_test_2 : failed to find parent from a family"),
+        }
+    }
+
+    #[test]
+    fn get_parent_firstname_test_3() {
+        let mut fam_test: Family = setup();
+        let firstname_test = "false parent";
+        
+        // Test if we can find someone named "Helen" in family
+        match fam_test.get_parent_firstname(String::from("George")) {
+            Some(parent) => assert_ne!(String::from(parent.firstname()), String::from(firstname_test)),
+            None => panic!("get_parent_firstname_test_2 : failed to find parent from a family"),
         }
     }
 }
